@@ -1,0 +1,1 @@
+cmd_/home/bcl/IMX6ULL-Linux-Driver/newchrled/newchrled.ko := arm-linux-gnueabihf-ld -EL -r  -T ./scripts/module-common.lds --build-id  -o /home/bcl/IMX6ULL-Linux-Driver/newchrled/newchrled.ko /home/bcl/IMX6ULL-Linux-Driver/newchrled/newchrled.o /home/bcl/IMX6ULL-Linux-Driver/newchrled/newchrled.mod.o
