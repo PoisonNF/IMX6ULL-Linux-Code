@@ -1,0 +1,1 @@
+cmd_/home/bcl/IMX6ULL-Linux-Driver/key/key.ko := arm-linux-gnueabihf-ld -EL -r  -T ./scripts/module-common.lds --build-id  -o /home/bcl/IMX6ULL-Linux-Driver/key/key.ko /home/bcl/IMX6ULL-Linux-Driver/key/key.o /home/bcl/IMX6ULL-Linux-Driver/key/key.mod.o

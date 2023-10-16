@@ -4,11 +4,11 @@
 #include <linux/fs.h>
 #include <linux/uaccess.h>
 
-#define CHRDEVBASE_MAJOR    200               //Ö÷Éè±¸ºÅ
-#define CHRDEVBASE_NAME     "chrdevbase"    //Éè±¸Ãû
+#define CHRDEVBASE_MAJOR    200               //ä¸»è®¾å¤‡å·
+#define CHRDEVBASE_NAME     "chrdevbase"    //è®¾å¤‡å
 
-static char readBuf[100];   /* ¶Á»º³å */
-static char writeBuf[100];  /* Ğ´»º³å */
+static char readBuf[100];   /* è¯»ç¼“å†² */
+static char writeBuf[100];  /* å†™ç¼“å†² */
 static char kernelData[] = {"kernel data!\n"};
 
 static int chrdevbase_open(struct inode *inode,struct file *filp)
@@ -29,7 +29,7 @@ static ssize_t chrdevbase_read(struct file *file, char __user *buf, size_t count
 
     printk("chrdevbase_read\n");
     memcpy(readBuf,kernelData,sizeof(kernelData));
-    ret = copy_to_user(buf,readBuf,count);  //ÄÚºË¿Õ¼äÊı¾İµ½ÓÃ»§¿Õ¼äµÄ¸´ÖÆ
+    ret = copy_to_user(buf,readBuf,count);  //å†…æ ¸ç©ºé—´æ•°æ®åˆ°ç”¨æˆ·ç©ºé—´çš„å¤åˆ¶
     if(ret != 0){
         printk("copy_to_user failed\n");
     }
@@ -41,7 +41,7 @@ static ssize_t chrdevbase_write(struct file *file, const char __user *buf, size_
     int ret = 0;
 
     printk("chrdevbase_write\n");
-    ret = copy_from_user(writeBuf,buf,count);   //ÓÃ»§¿Õ¼äÊı¾İµ½ÄÚºË¿Õ¼äµÄ¸´ÖÆ
+    ret = copy_from_user(writeBuf,buf,count);   //ç”¨æˆ·ç©ºé—´æ•°æ®åˆ°å†…æ ¸ç©ºé—´çš„å¤åˆ¶
     if(!ret){
         printk("kernel recevdata:%s\n",writeBuf);
     }else{
@@ -78,7 +78,7 @@ static void __exit chrdevbase_exit(void)
 }
 
 /**
- * Ä£¿éÈë¿ÚÓë³ö¿Ú
+ * æ¨¡å—å…¥å£ä¸å‡ºå£
 */
 module_init(chrdevbase_init);
 module_exit(chrdevbase_exit);

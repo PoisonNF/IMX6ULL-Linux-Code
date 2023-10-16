@@ -8,22 +8,22 @@
 #define LED_MAJOR   200
 #define LED_NAME    "led"
 
-/* ¼Ä´æÆ÷ÎïÀíµØÖ· */
+/* å¯„å­˜å™¨ç‰©ç†åœ°å€ */
 #define CCM_CCGR1_BASE              (0X020C406C)
 #define SW_MUX_GPIO1_IO03_BASE      (0X020E0068)
 #define SW_PAD_GPIO1_IO03_BASE      (0X020E02F4)
 #define GPIO1_DR_BASE               (0X0209C000)
 #define GPIO1_GDIR_BASE             (0X0209C004)
 
-/* ĞéÄâµØÖ· */
+/* è™šæ‹Ÿåœ°å€ */
 static void __iomem *IMX6ULL_CCM_CCGR1;
 static void __iomem *SW_MUX_GPIO1_IO03;
 static void __iomem *SW_PAD_GPIO1_IO03;
 static void __iomem *GPIO1_DR;
 static void __iomem *GPIO1_GDIR;
 
-#define LEDOFF 0 /* ¹Ø±Õ */
-#define LEDON  1 /* ¿ªÆô */
+#define LEDOFF 0 /* å…³é—­ */
+#define LEDON  1 /* å¼€å¯ */
 
 static void led_switch(u8 sta)
 {
@@ -31,11 +31,11 @@ static void led_switch(u8 sta)
 
     if(sta == LEDON){
         val = readl(GPIO1_DR);
-        val &= ~(1 << 3);  //bit3ÖÃ0£¬µãÁÁLED
+        val &= ~(1 << 3);  //bit3ç½®0ï¼Œç‚¹äº®LED
         writel(val,GPIO1_DR);  
     }else{
         val = readl(GPIO1_DR);
-        val |= (1 << 3);  //bit3ÖÃ1£¬Ï¨ÃğLED
+        val |= (1 << 3);  //bit3ç½®1ï¼Œç†„ç­LED
         writel(val,GPIO1_DR);  
     }
 }
@@ -62,7 +62,7 @@ static ssize_t led_write(struct file *filp, const char __user *buf,
         return -EFAULT;
     }
 
-    //¸ù¾İdataBufÅĞ¶Ï¿ªµÆ»¹ÊÇ¹ØµÆ
+    //æ ¹æ®dataBufåˆ¤æ–­å¼€ç¯è¿˜æ˜¯å…³ç¯
     led_switch(dataBuf[0]);
     
     return 0;
@@ -75,37 +75,37 @@ static const struct file_operations led_fops = {
     .write   = led_write,
 };
 
-/* Èë¿Ú */
+/* å…¥å£ */
 static int __init led_init(void)
 {
     u32 ret = 0;
     u32 val = 0;
 
-    /* ³õÊ¼»¯LEDµÆ¡¢µØÖ·Ó³Éä¡¢32Î»ÊÇ4¸ö×Ö½Ú */
+    /* åˆå§‹åŒ–LEDç¯ã€åœ°å€æ˜ å°„ã€32ä½æ˜¯4ä¸ªå­—èŠ‚ */
     IMX6ULL_CCM_CCGR1 = ioremap(CCM_CCGR1_BASE,4);
     SW_MUX_GPIO1_IO03 = ioremap(SW_MUX_GPIO1_IO03_BASE,4);
     SW_PAD_GPIO1_IO03 = ioremap(SW_PAD_GPIO1_IO03_BASE,4);
     GPIO1_DR = ioremap(GPIO1_DR_BASE,4);
     GPIO1_GDIR = ioremap(GPIO1_GDIR_BASE,4);
 
-    /* ³õÊ¼»¯Ê±ÖÓ */
+    /* åˆå§‹åŒ–æ—¶é’Ÿ */
     val = readl(IMX6ULL_CCM_CCGR1);
-    val &= ~(3 << 26);  //ÏÈÇå³ıbit26¡¢27Î»
-    val |= (3 << 27);   //bit26¡¢27Î»ÖÃ1
+    val &= ~(3 << 26);  //å…ˆæ¸…é™¤bit26ã€27ä½
+    val |= (3 << 27);   //bit26ã€27ä½ç½®1
     writel(val,IMX6ULL_CCM_CCGR1);
 
-    writel(0x5,SW_MUX_GPIO1_IO03);  //ÉèÖÃ¸´ÓÃ
-    writel(0x10b0,SW_PAD_GPIO1_IO03); //ÉèÖÃµçÆøÊôĞÔ
+    writel(0x5,SW_MUX_GPIO1_IO03);  //è®¾ç½®å¤ç”¨
+    writel(0x10b0,SW_PAD_GPIO1_IO03); //è®¾ç½®ç”µæ°”å±æ€§
 
     val = readl(GPIO1_GDIR);
-    val |= 1 << 3;  //bit3ÖÃ1£¬ÉèÖÃÎªÊä³ö
+    val |= 1 << 3;  //bit3ç½®1ï¼Œè®¾ç½®ä¸ºè¾“å‡º
     writel(val,GPIO1_GDIR);
 
     val = readl(GPIO1_DR);
-    val &= ~(1 << 3);  //bit3ÖÃ0£¬µãÁÁLED
+    val &= ~(1 << 3);  //bit3ç½®0ï¼Œç‚¹äº®LED
     writel(val,GPIO1_DR);
 
-    /* ×¢²á×Ö·ûÉè±¸ */
+    /* æ³¨å†Œå­—ç¬¦è®¾å¤‡ */
     ret = register_chrdev(LED_MAJOR,LED_NAME,&led_fops);
     if(ret < 0)
     {
@@ -117,22 +117,22 @@ static int __init led_init(void)
     return 0;
 }
 
-/* ³ö¿Ú */
+/* å‡ºå£ */
 static void __exit led_exit(void)
 {
-    /* È¡ÏûµØÖ·Ó³Éä */
+    /* å–æ¶ˆåœ°å€æ˜ å°„ */
     iounmap(IMX6ULL_CCM_CCGR1);
     iounmap(SW_MUX_GPIO1_IO03);
     iounmap(SW_PAD_GPIO1_IO03);
     iounmap(GPIO1_DR);
     iounmap(GPIO1_GDIR);
 
-    /* ×¢Ïú×Ö·ûÉè±¸ */
+    /* æ³¨é”€å­—ç¬¦è®¾å¤‡ */
     unregister_chrdev(LED_MAJOR,LED_NAME);
     printk("led_exit\n");
 }
 
-/* ×¢²áÇı¶¯¼ÓÔØºÍĞ¶ÔØ */
+/* æ³¨å†Œé©±åŠ¨åŠ è½½å’Œå¸è½½ */
 module_init(led_init);
 module_exit(led_exit);
 

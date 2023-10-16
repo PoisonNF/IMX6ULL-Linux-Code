@@ -5,13 +5,13 @@
 #include <string.h>
 
 /**
- * ./ledAPP <filename> <0:1> 0±íÊ¾¹ØµÆ£¬1±íÊ¾¿ªµÆ
- * ./ledAPP /dev/newchrled 0 ¹ØµÆ
- * ./ledAPP /dev/newchrled 1 ¿ªµÆ
+ * ./ledAPP <filename> <0:1> 0è¡¨ç¤ºå…³ç¯ï¼Œ1è¡¨ç¤ºå¼€ç¯
+ * ./ledAPP /dev/newchrled 0 å…³ç¯
+ * ./ledAPP /dev/newchrled 1 å¼€ç¯
 */
 
-#define LEDOFF 0 /* ¹Ø±Õ */
-#define LEDON  1 /* ¿ªÆô */
+#define LEDOFF 0 /* å…³é—­ */
+#define LEDON  1 /* å¼€å¯ */
 
 int main(int argc,char *argv[])
 {
@@ -20,7 +20,7 @@ int main(int argc,char *argv[])
     int *ledStatus;
     char *filename;
 
-    /* ²ÎÊıÊıÁ¿¼ì²â */
+    /* å‚æ•°æ•°é‡æ£€æµ‹ */
     if (argc != 3)
     {
         printf("Error usage\n");
@@ -29,14 +29,14 @@ int main(int argc,char *argv[])
 
     filename = argv[1];
 
-    /* ´ò¿ªÎÄ¼ş */
+    /* æ‰“å¼€æ–‡ä»¶ */
     fd = open(filename,O_RDWR);
     if(fd < 0){
         perror("open");
         return -1;
     }
 
-    /* Ğ´Èëled×´Ì¬ */
+    /* å†™å…¥ledçŠ¶æ€ */
     *ledStatus = atoi(argv[2]);
     ret = write(fd,ledStatus,1);
     if(ret < 0){
@@ -45,10 +45,10 @@ int main(int argc,char *argv[])
         return -1;
     }
 
-    /* ¹Ø±ÕÎÄ¼ş */
+    /* å…³é—­æ–‡ä»¶ */
     ret = close(fd);
     if(ret){
-        perror("read");
+        perror("close");
         return -1;
     }
     

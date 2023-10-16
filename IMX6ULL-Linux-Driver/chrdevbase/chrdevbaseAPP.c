@@ -5,9 +5,9 @@
 #include <string.h>
 
 /**
- * ./chrdevbaseAPP <filename> <1:2> 1±íÊ¾¶Á£¬2±íÊ¾Ğ´
- * ./chrdevbaseAPP /dev/chrdevbase 1 ±íÊ¾´ÓÇı¶¯ÀïÃæ¶ÁÊı¾İ
- * ./chrdevbaseAPP /dev/chrdevbase 2 ±íÊ¾´ÓÇı¶¯ÀïÃæĞ´Êı¾İ
+ * ./chrdevbaseAPP <filename> <1:2> 1è¡¨ç¤ºè¯»ï¼Œ2è¡¨ç¤ºå†™
+ * ./chrdevbaseAPP /dev/chrdevbase 1 è¡¨ç¤ºä»é©±åŠ¨é‡Œé¢è¯»æ•°æ®
+ * ./chrdevbaseAPP /dev/chrdevbase 2 è¡¨ç¤ºä»é©±åŠ¨é‡Œé¢å†™æ•°æ®
 */
 int main(int argc,char *argv[])
 {
@@ -47,7 +47,7 @@ int main(int argc,char *argv[])
     /* write */
     if(atoi(argv[2]) == 2)
     {
-        memcpy(writeBuf,usrdata,sizeof(usrdata));   //¿½±´usrdataÊı¾İ
+        memcpy(writeBuf,usrdata,sizeof(usrdata));   //æ‹·è´usrdataæ•°æ®
         ret = write(fd,writeBuf,100);
         if(ret < 0){
             perror("write");

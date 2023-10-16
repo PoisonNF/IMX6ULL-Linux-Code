@@ -9,31 +9,31 @@
 #include <linux/of.h>
 #include <linux/of_address.h>
 
-#define DTSLED_CNT  1           /* Éè±¸ºÅ¸öÊı */
-#define DTSLED_NAME "dtsled"    /* Éè±¸Ãû×Ö */
+#define DTSLED_CNT  1           /* è®¾å¤‡å·ä¸ªæ•° */
+#define DTSLED_NAME "dtsled"    /* è®¾å¤‡åå­— */
 
-/* ĞéÄâµØÖ· */
+/* è™šæ‹Ÿåœ°å€ */
 static void __iomem *IMX6ULL_CCM_CCGR1;
 static void __iomem *SW_MUX_GPIO1_IO03;
 static void __iomem *SW_PAD_GPIO1_IO03;
 static void __iomem *GPIO1_DR;
 static void __iomem *GPIO1_GDIR;
 
-#define LEDOFF 0 /* ¹Ø±Õ */
-#define LEDON  1 /* ¿ªÆô */
+#define LEDOFF 0 /* å…³é—­ */
+#define LEDON  1 /* å¼€å¯ */
 
-/* ledÉè±¸½á¹¹Ìå */
+/* ledè®¾å¤‡ç»“æ„ä½“ */
 struct dtsled_dev{
-    dev_t devid;            /* Éè±¸ºÅ */
-    int major;              /* Ö÷Éè±¸ºÅ */
-    int minor;              /* ´ÎÉè±¸ºÅ */
-    struct cdev cdev;       /* Éè±¸½á¹¹Ìå */
-    struct class *class;    /* Àà */
-    struct device *device;  /* Éè±¸ */
-    struct device_node *nd; /* Éè±¸½Úµã */
+    dev_t devid;            /* è®¾å¤‡å· */
+    int major;              /* ä¸»è®¾å¤‡å· */
+    int minor;              /* æ¬¡è®¾å¤‡å· */
+    struct cdev cdev;       /* è®¾å¤‡ç»“æ„ä½“ */
+    struct class *class;    /* ç±» */
+    struct device *device;  /* è®¾å¤‡ */
+    struct device_node *nd; /* è®¾å¤‡èŠ‚ç‚¹ */
 };
 
-struct dtsled_dev dtsled;   /* ledÉè±¸ */
+struct dtsled_dev dtsled;   /* ledè®¾å¤‡ */
 
 static void led_switch(u8 sta)
 {
@@ -41,18 +41,18 @@ static void led_switch(u8 sta)
 
     if(sta == LEDON){
         val = readl(GPIO1_DR);
-        val &= ~(1 << 3);  //bit3ÖÃ0£¬µãÁÁLED
+        val &= ~(1 << 3);  //bit3ç½®0ï¼Œç‚¹äº®LED
         writel(val,GPIO1_DR);  
     }else{
         val = readl(GPIO1_DR);
-        val |= (1 << 3);  //bit3ÖÃ1£¬Ï¨ÃğLED
+        val |= (1 << 3);  //bit3ç½®1ï¼Œç†„ç­LED
         writel(val,GPIO1_DR);  
     }
 }
 
 static int dtsled_open(struct inode *inode, struct file *filp)
 {
-    filp->private_data = &dtsled;   //ÉèÖÃË½ÓĞÊôĞÔ
+    filp->private_data = &dtsled;   //è®¾ç½®ç§æœ‰å±æ€§
     return 0;
 }
 
@@ -75,13 +75,13 @@ static ssize_t dtsled_write(struct file *filp, const char __user *buf,
         return -EFAULT;
     }
 
-    //¸ù¾İdataBufÅĞ¶Ï¿ªµÆ»¹ÊÇ¹ØµÆ
+    //æ ¹æ®dataBufåˆ¤æ–­å¼€ç¯è¿˜æ˜¯å…³ç¯
     led_switch(dataBuf[0]);
     
     return 0;
 }
 
-/* Éè±¸²Ù×÷º¯Êı */
+/* è®¾å¤‡æ“ä½œå‡½æ•° */
 static const struct file_operations dtsled_fops = {
     .owner   = THIS_MODULE,
     .open    = dtsled_open,
@@ -89,7 +89,7 @@ static const struct file_operations dtsled_fops = {
     .write   = dtsled_write,
 };
 
-/* Èë¿Ú */
+/* å…¥å£ */
 static int __init dtsled_init(void)
 {
     int ret = 0;
@@ -98,13 +98,13 @@ static int __init dtsled_init(void)
     u32 regdata[14];
     u32 val;
 
-    /* ×¢²á×Ö·ûÉè±¸ */
-    /* 1.ÉêÇëÉè±¸ºÅ */
-    dtsled.major = 0;   //ÓÉÄÚºË·ÖÅä
-    if(dtsled.major){   //¸ø¶¨Éè±¸ºÅ
+    /* æ³¨å†Œå­—ç¬¦è®¾å¤‡ */
+    /* 1.ç”³è¯·è®¾å¤‡å· */
+    dtsled.major = 0;   //ç”±å†…æ ¸åˆ†é…
+    if(dtsled.major){   //ç»™å®šè®¾å¤‡å·
         dtsled.devid = MKDEV(dtsled.major,0);
         ret = register_chrdev_region(dtsled.devid,DTSLED_CNT,DTSLED_NAME);
-    }else{  //Ã»ÓĞ¸ø¶¨Éè±¸ºÅ
+    }else{  //æ²¡æœ‰ç»™å®šè®¾å¤‡å·
         ret = alloc_chrdev_region(&dtsled.devid,0,DTSLED_CNT,DTSLED_NAME);
         dtsled.major = MAJOR(dtsled.devid);
         dtsled.minor = MINOR(dtsled.devid);
@@ -114,7 +114,7 @@ static int __init dtsled_init(void)
         goto fail_devid;
     }
 
-    /* 2.Ìí¼Ó×Ö·ûÉè±¸ */
+    /* 2.æ·»åŠ å­—ç¬¦è®¾å¤‡ */
     dtsled.cdev.owner = THIS_MODULE;
     cdev_init(&dtsled.cdev,&dtsled_fops);
     ret = cdev_add(&dtsled.cdev,dtsled.devid,DTSLED_CNT);
@@ -122,29 +122,29 @@ static int __init dtsled_init(void)
         goto fail_cdev;
     }
 
-    /* ×Ô¶¯Ìí¼ÓÉè±¸½Úµã */
-    /* 1.Ìí¼ÓÀà */
+    /* è‡ªåŠ¨æ·»åŠ è®¾å¤‡èŠ‚ç‚¹ */
+    /* 1.æ·»åŠ ç±» */
     dtsled.class = class_create(THIS_MODULE,DTSLED_NAME);
     if(IS_ERR(dtsled.class)){
         ret = PTR_ERR(dtsled.class);
         goto fail_class;
     }
-    /* 2.Ìí¼ÓÉè±¸ */
+    /* 2.æ·»åŠ è®¾å¤‡ */
     dtsled.device = device_create(dtsled.class,NULL,dtsled.devid,NULL,DTSLED_NAME);
     if(IS_ERR(dtsled.device)){
         ret = PTR_ERR(dtsled.device);
         goto fail_device;
     }
 
-    /* »ñÈ¡Éè±¸Ê÷ÄÚÈİ */
-    /* 1.»ñÈ¡Éè±¸½Úµã */
+    /* è·å–è®¾å¤‡æ ‘å†…å®¹ */
+    /* 1.è·å–è®¾å¤‡èŠ‚ç‚¹ */
     dtsled.nd = of_find_node_by_path("/alphaled");
     if(dtsled.nd == NULL){
         ret = -EINVAL;
         goto fail_findnd;
     }
 
-    /* 2.»ñÈ¡compatibleÊôĞÔ */
+    /* 2.è·å–compatibleå±æ€§ */
     proper = of_find_property(dtsled.nd,"compatible",NULL);
     if(proper == NULL){
         printk("compatible property find failed\r\n");
@@ -153,7 +153,7 @@ static int __init dtsled_init(void)
         printk("compatible = %s\n",(char *)proper->value);
     }
 
-    /* 3.»ñÈ¡statusÊôĞÔ */
+    /* 3.è·å–statuså±æ€§ */
     ret = of_property_read_string(dtsled.nd,"status",&str);
     if(ret < 0){
         printk("status read failed\n");
@@ -162,7 +162,7 @@ static int __init dtsled_init(void)
         printk("status = %s\n",str);
     }
 
-    /* 4.»ñÈ¡regÊôĞÔ */
+    /* 4.è·å–regå±æ€§ */
     ret = of_property_read_u32_array(dtsled.nd,"reg",regdata,10);
     if(ret < 0){
         printk("reg property read failed\n");
@@ -175,7 +175,7 @@ static int __init dtsled_init(void)
         printk("\n");
     }
     
-    /* ³õÊ¼»¯LEDµÆ¡¢µØÖ·Ó³Éä¡¢32Î»ÊÇ4¸ö×Ö½Ú */
+    /* åˆå§‹åŒ–LEDç¯ã€åœ°å€æ˜ å°„ã€32ä½æ˜¯4ä¸ªå­—èŠ‚ */
 #if 0
     IMX6ULL_CCM_CCGR1 = ioremap(regdata[0],regdata[1]);
     SW_MUX_GPIO1_IO03 = ioremap(regdata[2],regdata[3]);
@@ -190,24 +190,24 @@ static int __init dtsled_init(void)
     GPIO1_GDIR = of_iomap(dtsled.nd,4);
 #endif
 
-    /* Ê¹ÄÜ GPIO1 Ê±ÖÓ */
+    /* ä½¿èƒ½ GPIO1 æ—¶é’Ÿ */
     val = readl(IMX6ULL_CCM_CCGR1);
-    val &= ~(3 << 26);  //ÏÈÇå³ıbit26¡¢27Î»
-    val |= (3 << 27);   //bit26¡¢27Î»ÖÃ1
+    val &= ~(3 << 26);  //å…ˆæ¸…é™¤bit26ã€27ä½
+    val |= (3 << 27);   //bit26ã€27ä½ç½®1
     writel(val,IMX6ULL_CCM_CCGR1);
 
-    /* ÉèÖÃ GPIO1_IO03 µÄ¸´ÓÃ¹¦ÄÜ£¬×îºóÉèÖÃ IO ÊôĞÔ */
-    writel(0x5,SW_MUX_GPIO1_IO03);  //ÉèÖÃ¸´ÓÃ
-    writel(0x10b0,SW_PAD_GPIO1_IO03); //ÉèÖÃµçÆøÊôĞÔ
+    /* è®¾ç½® GPIO1_IO03 çš„å¤ç”¨åŠŸèƒ½ï¼Œæœ€åè®¾ç½® IO å±æ€§ */
+    writel(0x5,SW_MUX_GPIO1_IO03);  //è®¾ç½®å¤ç”¨
+    writel(0x10b0,SW_PAD_GPIO1_IO03); //è®¾ç½®ç”µæ°”å±æ€§
 
-    /* ÉèÖÃ GPIO1_IO03 ÎªÊä³ö¹¦ÄÜ */
+    /* è®¾ç½® GPIO1_IO03 ä¸ºè¾“å‡ºåŠŸèƒ½ */
     val = readl(GPIO1_GDIR);
-    val |= 1 << 3;  //bit3ÖÃ1£¬ÉèÖÃÎªÊä³ö
+    val |= 1 << 3;  //bit3ç½®1ï¼Œè®¾ç½®ä¸ºè¾“å‡º
     writel(val,GPIO1_GDIR);
 
-    /* Ä¬ÈÏ¹Ø±Õ LED */
+    /* é»˜è®¤å…³é—­ LED */
     val = readl(GPIO1_DR);
-    val |= (1 << 3);  //bit3ÖÃ1£¬Ä¬ÈÏÏ¨ÃğLED
+    val |= (1 << 3);  //bit3ç½®1ï¼Œé»˜è®¤ç†„ç­LED
     writel(val,GPIO1_DR);
 
     return 0;
@@ -215,41 +215,41 @@ static int __init dtsled_init(void)
 fail_rs:
 
 fail_findnd:
-    device_destroy(dtsled.class,dtsled.devid);  //´İ»ÙÉè±¸
+    device_destroy(dtsled.class,dtsled.devid);  //æ‘§æ¯è®¾å¤‡
 fail_device:
-    class_destroy(dtsled.class);    //´İ»ÙÀà
+    class_destroy(dtsled.class);    //æ‘§æ¯ç±»
 fail_class:
-    cdev_del(&dtsled.cdev); //É¾³ıcdev
+    cdev_del(&dtsled.cdev); //åˆ é™¤cdev
 fail_cdev:
     unregister_chrdev_region(dtsled.devid,DTSLED_CNT);
 fail_devid:
     return ret;
 }
 
-/* ³ö¿Ú */
+/* å‡ºå£ */
 static void __exit dtsled_exit(void)
 {
-    /* ¹Ø±ÕLED */
+    /* å…³é—­LED */
     led_switch(LEDOFF);
 
-    /* È¡ÏûµØÖ·Ó³Éä */
+    /* å–æ¶ˆåœ°å€æ˜ å°„ */
     iounmap(IMX6ULL_CCM_CCGR1);
     iounmap(SW_MUX_GPIO1_IO03);
     iounmap(SW_PAD_GPIO1_IO03);
     iounmap(GPIO1_DR);
     iounmap(GPIO1_GDIR);
 
-    /* ×¢Ïú×Ö·ûÉè±¸Çı¶¯ */
-    cdev_del(&dtsled.cdev); //É¾³ıcdev
-    unregister_chrdev_region(dtsled.devid,DTSLED_CNT);  //×¢ÏúÉè±¸ºÅ
+    /* æ³¨é”€å­—ç¬¦è®¾å¤‡é©±åŠ¨ */
+    cdev_del(&dtsled.cdev); //åˆ é™¤cdev
+    unregister_chrdev_region(dtsled.devid,DTSLED_CNT);  //æ³¨é”€è®¾å¤‡å·
 
-    device_destroy(dtsled.class,dtsled.devid);  //´İ»ÙÉè±¸
-    class_destroy(dtsled.class);    //´İ»ÙÀà
+    device_destroy(dtsled.class,dtsled.devid);  //æ‘§æ¯è®¾å¤‡
+    class_destroy(dtsled.class);    //æ‘§æ¯ç±»
 
     return;
 }
 
-/* ×¢²áÇı¶¯ºÍĞ¶ÔØÇı¶¯ */
+/* æ³¨å†Œé©±åŠ¨å’Œå¸è½½é©±åŠ¨ */
 module_init(dtsled_init);
 module_exit(dtsled_exit);
 MODULE_LICENSE("GPL");

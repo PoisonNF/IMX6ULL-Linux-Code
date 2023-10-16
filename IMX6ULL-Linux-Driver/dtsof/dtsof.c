@@ -19,11 +19,11 @@
 	};
 */
 
-/* Ä£¿éÈë¿Ú */
+/* æ¨¡å—å…¥å£ */
 static int __init disof_init(void)
 {
     int ret = 0;
-    struct device_node *bl_nd = NULL; /* ½Úµã */
+    struct device_node *bl_nd = NULL; /* èŠ‚ç‚¹ */
     struct property *comppro = NULL;
     const char *str;
     u32 def_value = 0;
@@ -33,14 +33,14 @@ static int __init disof_init(void)
 
     printk("disof_init\n");
 
-    /* ÕÒµ½backlight½Úµã Â·¾¶ÊÇ:/backlight */
+    /* æ‰¾åˆ°backlightèŠ‚ç‚¹ è·¯å¾„æ˜¯:/backlight */
     bl_nd = of_find_node_by_path("/backlight");
     if(bl_nd == NULL){
         ret = -EINVAL;
         goto fail_findnd;
     }
 
-    /* »ñÈ¡×Ö·û´®ÊôĞÔ */
+    /* è·å–å­—ç¬¦ä¸²å±æ€§ */
     comppro = of_find_property(bl_nd,"compatible",NULL);
     if(comppro == NULL){
         ret = -EINVAL;
@@ -56,7 +56,7 @@ static int __init disof_init(void)
         printk("status = %s\n",str);
     }
 
-    /* »ñÈ¡Êı×ÖÊôĞÔ */
+    /* è·å–æ•°å­—å±æ€§ */
     ret = of_property_read_u32(bl_nd,"default-brightness-level",&def_value);
     if(ret < 0){
         goto fail_read32;
@@ -64,7 +64,7 @@ static int __init disof_init(void)
         printk("default-brightness-level = %d\n",def_value);
     }
 
-    /* »ñÈ¡Êı×éÊôĞÔ */
+    /* è·å–æ•°ç»„å±æ€§ */
     elemsize = of_property_count_elems_of_size(bl_nd,"brightness-levels",sizeof(u32));
     if(elemsize < 0){
         ret = -EINVAL;
@@ -101,17 +101,17 @@ fail_findnd:
     return ret;
 }
 
-/* Ä£¿é³ö¿Ú */
+/* æ¨¡å—å‡ºå£ */
 static void __exit disof_exit(void)
 {
     printk("disof_exit\n");
     return;
 }
 
-/* Ä£¿éÈë¿ÚºÍ³ö¿Ú */
+/* æ¨¡å—å…¥å£å’Œå‡ºå£ */
 module_init(disof_init);
 module_exit(disof_exit);
 
-/* ×¢²áÄ£¿éÈë¿ÚºÍ³ö¿Ú */
+/* æ³¨å†Œæ¨¡å—å…¥å£å’Œå‡ºå£ */
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("bcl");

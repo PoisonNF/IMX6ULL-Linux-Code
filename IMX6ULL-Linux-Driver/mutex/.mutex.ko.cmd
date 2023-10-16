@@ -1,0 +1,1 @@
+cmd_/home/bcl/IMX6ULL-Linux-Driver/mutex/mutex.ko := arm-linux-gnueabihf-ld -EL -r  -T ./scripts/module-common.lds --build-id  -o /home/bcl/IMX6ULL-Linux-Driver/mutex/mutex.ko /home/bcl/IMX6ULL-Linux-Driver/mutex/mutex.o /home/bcl/IMX6ULL-Linux-Driver/mutex/mutex.mod.o

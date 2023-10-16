@@ -1,0 +1,1 @@
+cmd_/home/bcl/IMX6ULL-Linux-Driver/timer/timer.ko := arm-linux-gnueabihf-ld -EL -r  -T ./scripts/module-common.lds --build-id  -o /home/bcl/IMX6ULL-Linux-Driver/timer/timer.ko /home/bcl/IMX6ULL-Linux-Driver/timer/timer.o /home/bcl/IMX6ULL-Linux-Driver/timer/timer.mod.o
