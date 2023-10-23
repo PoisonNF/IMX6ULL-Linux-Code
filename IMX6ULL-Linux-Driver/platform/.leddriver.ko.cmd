@@ -1,0 +1,1 @@
+cmd_/home/bcl/IMX6ULL-Linux-Driver/platform/leddriver.ko := arm-linux-gnueabihf-ld -EL -r  -T ./scripts/module-common.lds --build-id  -o /home/bcl/IMX6ULL-Linux-Driver/platform/leddriver.ko /home/bcl/IMX6ULL-Linux-Driver/platform/leddriver.o /home/bcl/IMX6ULL-Linux-Driver/platform/leddriver.mod.o

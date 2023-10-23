@@ -53,7 +53,9 @@
         "mutex.h": "c",
         "fiemap.h": "c",
         "rculist_bl.h": "c",
-        "atomic.h": "c"
+        "atomic.h": "c",
+        "wait.h": "c",
+        "platform_device.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled",
     "C_Cpp.codeAnalysis.clangTidy.checks.disabled": [

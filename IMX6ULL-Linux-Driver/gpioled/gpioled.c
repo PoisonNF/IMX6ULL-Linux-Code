@@ -170,7 +170,7 @@ fail_devid:
 static void __exit led_exit(void)
 {
     /* 关闭LED */
-    gpio_set_value(gpioled.led_gpio,LEDOFF);
+    gpio_set_value(gpioled.led_gpio,1);
     gpio_free(gpioled.led_gpio);
 
     /* 注销字符设备驱动 */

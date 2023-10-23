@@ -1,0 +1,1 @@
+cmd_/home/bcl/IMX6ULL-Linux-Driver/blockio/blockio.ko := arm-linux-gnueabihf-ld -EL -r  -T ./scripts/module-common.lds --build-id  -o /home/bcl/IMX6ULL-Linux-Driver/blockio/blockio.ko /home/bcl/IMX6ULL-Linux-Driver/blockio/blockio.o /home/bcl/IMX6ULL-Linux-Driver/blockio/blockio.mod.o
