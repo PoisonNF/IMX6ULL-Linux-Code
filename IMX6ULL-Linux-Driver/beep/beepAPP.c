@@ -17,7 +17,7 @@ int main(int argc,char *argv[])
 {
     int fd;
     int ret;
-    int *beepStatus;
+    int beepStatus[1];
     char *filename;
 
     /* 参数数量检测 */
@@ -37,7 +37,7 @@ int main(int argc,char *argv[])
     }
 
     /* 写入beep状态 */
-    *beepStatus = atoi(argv[2]);
+    beepStatus[0] = atoi(argv[2]);
     ret = write(fd,beepStatus,1);
     if(ret < 0){
         perror("write");

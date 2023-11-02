@@ -17,7 +17,7 @@ int main(int argc,char *argv[])
 {
     int fd;
     int ret;
-    int *ledStatus;
+    int databuf[1];
     char *filename;
 
     /* 参数数量检测 */
@@ -37,8 +37,8 @@ int main(int argc,char *argv[])
     }
 
     /* 写入led状态 */
-    *ledStatus = atoi(argv[2]);
-    ret = write(fd,ledStatus,1);
+    databuf[0] = atoi(argv[2]);
+    ret = write(fd,databuf,1);
     if(ret < 0){
         perror("write");
         close(fd);
